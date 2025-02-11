@@ -1,0 +1,23 @@
+button, img{
+    height: 150px; 
+    width: 150px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background-color: #FAF9F6; 
+}
+
+img{ 
+    height: 100px; 
+    width: 100px; 
+}
+   
+
+.button-container {
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+    position: fixed; 
+    bottom: 100px; 
+    right: 100px; 
+}
