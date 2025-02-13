@@ -1,3 +1,4 @@
+let displayValue = ""; 
 let num1, num2 = 0; 
 let operator = '';
 
@@ -21,3 +22,42 @@ function operate(operator, num1, num2) {
             div(num1, num2); 
     }
 }
+
+function updateDisplay(){
+    document.querySelector("#display").textContent = displayValue;
+}
+
+function handleNumberClick(event) {
+    displayValue += " " + event.target.textContent;
+    updateDisplay();
+}
+
+function handleOperatorClick(event) {
+    displayValue += " " + event.target.textContent;
+    updateDisplay();
+}
+
+function handleClear(event) {
+    displayValue = "";
+    updateDisplay();
+}
+
+function handleEqual(event) {
+    displayValue += " " + event.target.textContent;
+    updateDisplay();
+}
+
+document.querySelectorAll(".number").forEach(button => {
+    button.addEventListener("click", handleNumberClick);
+})
+
+document.querySelectorAll(".operator").forEach(button => {
+    button.addEventListener("click", handleOperatorClick);
+})
+
+document.querySelectorAll(".clear").forEach(button => {
+    button.addEventListener("click", handleClear);
+})
+document.querySelectorAll(".equal").forEach(button => {
+    button.addEventListener("click", handleEqual);
+})
