@@ -1,7 +1,7 @@
 let displayValue = ""; 
 let equationDisplay = ""; 
 let num1 = null, num2 = null; 
-let operator = " ";
+let operator = null;
 let resultDisplayed = false;
 
 const add = (a,b) => a + b; 
@@ -28,35 +28,42 @@ function handleNumberClick(event) {
     if (resultDisplayed) {
         displayValue = digit;
         equationDisplay = digit;
-        num1 = parseFloat(displayValue);
+        num1 = null;
         num2 = null;
-        operator = "";
+        operator = null;
         resultDisplayed = false;
         updateDisplay();
         return;
     }
 
-    displayValue += digit;
-
-    if(operator === ' '){ 
-        num1 = parseFloat(displayValue);
-        equationDisplay = displayValue
+    if (operator === null) {
+        if(num1 === null){ 
+            num1 = parseInt(digit); 
+            displayValue = digit;
+            equationDisplay = displayValue;
+        } else {
+            num1 = num1 * 10 + parseInt(digit); 
+            displayValue += digit;
+            equationDisplay = displayValue; 
+        }
     } else {
-        if (num2 === null) displayValue = "";
-        num2 = parseFloat(displayValue); 
-        equationDisplay = `${num1} ${operator} ${displayValue}`;
+        num2 = num2 ? num2 * 10 + parseInt(digit) : parseInt(digit);  
+        displayValue += digit;  
+        equationDisplay = `${num1} ${operator} ${displayValue}`; 
     }
 
     updateDisplay();
 }
 
 function handleOperatorClick(event) {
-    if(num1 != null && operator === ' ') {
-        operator = event.target.textContent; 
-        equationDisplay =  `${num1} ${operator}`;
-        displayValue = ""; 
-        updateDisplay();
+    if (displayValue !== "") {
+        num2 = parseFloat(displayValue);  
     }
+
+    operator = event.target.textContent;  
+    displayValue = "";  
+    equationDisplay = `${num1} ${operator}`;  
+    updateDisplay();
 }
 
 function handleClear(event) {
@@ -64,19 +71,23 @@ function handleClear(event) {
     equationDisplay = ""; 
     num1 = null;
     num2 = null;
-    operator = ' ';
+    operator = null;
     resultDisplayed = false; 
     updateDisplay();
 }
 
 function handleEqual(event) {
-    if (num1 != null && num2 != null && operator != ' '){
+    if (displayValue !== "") {
+        num2 = parseFloat(displayValue);
+    }
+    
+    if (num1 != null && num2 != null && operator != null){
         let result = operate(operator, num1, num2); 
         equationDisplay = `${num1} ${operator} ${num2} = ${result}`;
 
         num1 = result; 
         num2 = null; 
-        operator = '';
+        operator = null;
         displayValue = "";  
         resultDisplayed = true; 
         updateDisplay();
