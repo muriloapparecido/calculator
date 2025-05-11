@@ -2,6 +2,7 @@ let displayValue = "";
 let equationDisplay = ""; 
 let num1 = null, num2 = null; 
 let operator = " ";
+let resultDisplayed = false;
 
 const add = (a,b) => a + b; 
 const sub = (a,b) => a - b; 
@@ -22,26 +23,40 @@ function updateDisplay(){
 }
 
 function handleNumberClick(event) {
-    if(operator === ' '){
-        displayValue += event.target.textContent; 
+    const digit = event.target.textContent;
+
+    if (resultDisplayed) {
+        displayValue = digit;
+        equationDisplay = digit;
         num1 = parseFloat(displayValue);
-        equationDisplay = num1
+        num2 = null;
+        operator = "";
+        resultDisplayed = false;
+        updateDisplay();
+        return;
+    }
+
+    displayValue += digit;
+
+    if(operator === ' '){ 
+        num1 = parseFloat(displayValue);
+        equationDisplay = displayValue
     } else {
         if (num2 === null) displayValue = "";
-        displayValue += event.target.textContent; 
         num2 = parseFloat(displayValue); 
-        equationDisplay += " " + num2; 
+        equationDisplay = `${num1} ${operator} ${displayValue}`;
     }
+
     updateDisplay();
 }
 
 function handleOperatorClick(event) {
     if(num1 != null && operator === ' ') {
         operator = event.target.textContent; 
-        equationDisplay =  displayValue + " " + operator;
+        equationDisplay =  `${num1} ${operator}`;
         displayValue = ""; 
+        updateDisplay();
     }
-    updateDisplay();
 }
 
 function handleClear(event) {
@@ -50,20 +65,22 @@ function handleClear(event) {
     num1 = null;
     num2 = null;
     operator = ' ';
+    resultDisplayed = false; 
     updateDisplay();
 }
 
 function handleEqual(event) {
     if (num1 != null && num2 != null && operator != ' '){
         let result = operate(operator, num1, num2); 
-        equationDisplay =  num1 + " " + operator + " " + num2 + " = " + result;
+        equationDisplay = `${num1} ${operator} ${num2} = ${result}`;
 
         num1 = result; 
         num2 = null; 
-        operator = ''; 
+        operator = '';
+        displayValue = "";  
+        resultDisplayed = true; 
+        updateDisplay();
     }
-    updateDisplay();
-
 }
 
 document.querySelectorAll(".number").forEach(button => {
